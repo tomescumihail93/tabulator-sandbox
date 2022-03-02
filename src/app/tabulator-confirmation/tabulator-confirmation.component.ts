@@ -65,6 +65,10 @@ export class TabulatorConfirmationComponent implements OnInit, AfterViewInit {
         //cell - cell component
         alert("Are you sure you want to stop editing")
       },
+      cellEdited:function(cell: any){
+        alert("are you sure you want to cancel edit?")
+        //cell - cell component
+        },
 
     },
     {
@@ -88,8 +92,9 @@ export class TabulatorConfirmationComponent implements OnInit, AfterViewInit {
     titleElement.style.padding = "4px"
     titleElement.style.position= "absolute";
     titleElement.style.width='100%';
-    titleElement.style.background='red'; // CHANGE THIS TO TRANSPARENT
+    titleElement.style.background='transparent'; // CHANGE THIS TO TRANSPARENT
     titleElement.style.height = "40px"
+    titleElement.style.zIndex = "1"
     titleElement.innerHTML = cell.getValue();
     titleElement.onclick = (e) => this.customColumnHeaderClicked(e, cell);
     return titleElement; 
@@ -97,8 +102,11 @@ export class TabulatorConfirmationComponent implements OnInit, AfterViewInit {
 
   customColumnHeaderClicked(e: any, cell: any) {
     // The following two lines will block the default sort event from being triggered
-    e.stopPropagation();
-    e.preventDefault();
+    if(!confirm('Are you sure you want to sort?')) {
+      e.stopPropagation();
+      e.preventDefault();
+      // return;?
+    }
   
     // My header click event handler needed the column reference object normally passed in from Tabulator (not shown in the provided sample).  
     // To fix this, I needed to lookup the column component from information that I did have
@@ -107,8 +115,16 @@ export class TabulatorConfirmationComponent implements OnInit, AfterViewInit {
   }
 
   headerClickHandler(e: any, column: any) {
-    alert('This alert will appear when clicking on the left 90% area of the column header and no sorting will be done!');
-    console.log(this.Table?.getSorters())
-    // this.Table?.setSort([{column:"name", dir:"asc"}])
+    console.log(this.Table?.getSorters(), column.getField());
+
+    const currentActiveSorters = this.Table?.getSorters();
+    if(currentActiveSorters) {
+
+    }
+    // if(this.Table?.getSorters()) {
+    //   this
+    // }
+    // if()
+    // this.Table?.setSort([{column: column.getField(), dir:"asc"}])
   }
 }
